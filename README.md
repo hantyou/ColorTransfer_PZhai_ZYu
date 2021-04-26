@@ -14,5 +14,5 @@ In this project, we realize the IDT algorithm and reduce the grain artifect with
 
 ## IDT algorithm
 
-The IDT algorithm is an application of 1D probability density function (pdf) transfer to a higher dimension. Basic idea is to project the high dimension samples (3-D here) iteratively onto three 1-D axis. These axis are orthogonal to each other. For example, consider a 3-D data set with M samples<img src="https://render.githubusercontent.com/render/math?math=U=\{u_1,u_2,\cdots,u_M\}">. For each sample $u_i\in U$, there is $'u_i=[u_{i,1},u_{i,2},u_{i,3}]'$
+The IDT algorithm is an application of 1D probability density function (pdf) transfer to a higher dimension. Basic idea is to project the high dimension samples (3-D here) iteratively onto three 1-D axis. These axis are orthogonal to each other. For example, consider a 3-D data set with M samples<img src="https://render.githubusercontent.com/render/math?math=U=\{u_1,u_2,\cdots,u_M\}">. For each sample $u_i\in U$, there is <img src="https://render.githubusercontent.com/render/math?math=u_i=[u_{i,1},u_{i,2},u_{i,3}]\}">.
 
