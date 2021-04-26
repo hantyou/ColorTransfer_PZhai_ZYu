@@ -8,8 +8,8 @@ end
 bar_num=300;
 R=[1/3 2/3 2/3;2/3 1/3 -2/3;-2/3 2/3 -1/3];
 for iter=1:iter_num
-    txt=["Iteration",num2str(iter),"/",num2str(iter_num)];
-    disp(txt);
+    txt=['IDT iteration\t',num2str(iter),'/',num2str(iter_num),'\n'];
+    fprintf(txt);
     axis_num=size(R,1);
     ru0=R*u0;
     ru1=R*u1;
