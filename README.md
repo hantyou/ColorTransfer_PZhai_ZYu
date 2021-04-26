@@ -5,11 +5,12 @@ By Peiyuan Zhai & Zhuangzhuang Yu
 ## Introduction
 
 This is a project containing the final project of Course AP3132 from TU Delft. The Project is mainly based on the following paper.
-'''
-[Pitie07a] Automated colour grading using colour distribution transfer.
-F. Pitie , A. Kokaram and R. Dahyot (2007) Computer Vision and Image
-Understanding.
-'''
+
+> [Pitie07a] Automated colour grading using colour distribution transfer.
+> F. Pitie , A. Kokaram and R. Dahyot (2007) Computer Vision and Image
+> Understanding.
+
+
 In this project, we realize the IDT algorithm and reduce the grain artifect with proposed algorithm.
 
 ## IDT algorithm
