@@ -1,6 +1,13 @@
 function output = IDT(I0,I1,iter_num,plotIterResult)
-% u0=zeros(3,size(I0,1)*size(I0,2));
-% u1=size(u0);
+%IDT
+%output = IDT(I0,I1,iter_num,plotIterResult)
+%This function do the IDT iterations. The output is the image after
+%color transform. The function has two data input I0 and I1, both in image
+%form. They do not need to be transformed into vector form, which is down
+%inside the function. iter_num controls the iteration number of IDT.
+%plotIterResult controls whether intermediate plots described as Task 3 are
+%drawn. It can be ommited, which means no ploting. If you want ploting, set
+%this value to 1.
 if nargin<4
     plotIterResult=0;
 end
@@ -22,10 +29,10 @@ R=eye(channel);
 % R=[eye(3);R];
 if plotIterResult
     figure;
-        subplot(ceil(iter_num/4),4,1);
+        subplot(ceil(iter_num/4),4,2);
         plotItermediateResultFromData(u_original);
         title('original');
-        subplot(ceil(iter_num/4),4,2);
+        subplot(ceil(iter_num/4),4,1);
         plotItermediateResultFromData(u1);
         title('target');
 end
@@ -40,15 +47,22 @@ for iter=1:iter_num
     for c=1:axis_num
         ru0_c=ru0(c,:);
         ru1_c=ru1(c,:);
-        [hist_0,hist_1,range] = GetHist(ru0_c,ru1_c,bar_num);
+        [hist_0,hist_1,range] = GetHist(ru0_c,ru1_c,bar_num);% Calculate histogram
         min_value=range(1);
-        max_value=range(2);
+        max_value=range(2);% decide the range of pixel values
         range=linspace(min_value,max_value,bar_num);
         t_c= TransferPDF_1D(hist_0,hist_1);% find the transform in 1-D
         ru0_c_out=interp1(range,t_c,ru0_c,'linear')./(bar_num-1).*(max_value-min_value)+min_value;% apply the transform
         u0_out(c,:)=ru0_c_out;
     end
     u0=u0+inv(R)*(u0_out-ru0);% everytime we take a new R, so we project the vectors back to the original axis
+    % if we do not turn it back, then the next iteration would be operating
+    % on rotated datas. Though this is same with what is described in the
+    % paper, but we finally still need to rotate the data back. If we do
+    % this at the end of last iteration, then we need to record all the R
+    % used as R_1,R_2,R_3... and rotate the data back according to them.
+    % But that is too troublesome, so we project the data ru0 back to u0
+    % with current R for every iteration.
     if plotIterResult
         subplot(ceil((iter_num+2)/4),4,2+iter);
         plotItermediateResultFromData(u0);
