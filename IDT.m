@@ -36,12 +36,13 @@ if plotIterResult
         plotItermediateResultFromData(u1);
         title('target');
 end
+R_sum=R;
 for iter=1:iter_num
     txt=['IDT iteration\t',num2str(iter),'/',num2str(iter_num),'\n'];
     fprintf(txt);
     axis_num=size(R,1);
-    ru0=R*u0;
-    ru1=R*u1;
+    ru0=R'*u0;
+    ru1=R'*u1;
     % ru0 and ru1 are rotated (projected) values
     u0_out=zeros(size(u0));
     for c=1:axis_num
@@ -55,7 +56,7 @@ for iter=1:iter_num
         ru0_c_out=interp1(range,t_c,ru0_c,'linear')./(bar_num-1).*(max_value-min_value)+min_value;% apply the transform
         u0_out(c,:)=ru0_c_out;
     end
-    u0=u0+inv(R)*(u0_out-ru0);% everytime we take a new R, so we project the vectors back to the original axis
+    u0=u0+R*(u0_out-ru0);% everytime we take a new R, so we project the vectors back to the original axis
     % if we do not turn it back, then the next iteration would be operating
     % on rotated datas. Though this is same with what is described in the
     % paper, but we finally still need to rotate the data back. If we do
