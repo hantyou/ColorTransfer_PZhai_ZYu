@@ -27,7 +27,7 @@ subplot(223),imshow(output),title(txt);
 % D1=D1./50;
 % output2 = IDT(D0,D1,iter_num,1);
 %% Task 4: Fine grain
-iter_num=10;
+iter_num=50;
 [h,w,~]=size(I0);
 output = FineGrain(imresize(output,[h/2,w/2]),imresize(I0,[h/2,w/2]),iter_num);
 output=imresize(output,[h,w]);
