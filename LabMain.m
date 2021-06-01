@@ -1,7 +1,9 @@
 clear,close all;
-I0 = double(imread('scotland_house.png'))/255;
-I1 = double(imread('scotland_plain.png'))/255;
-
+I0 = double(imread('45.jpg'))/255;
+I1 = double(imread('star.jpg'))/255;
+% I0=imrotate(I0,90);
+I0=imresize(I0,[round(size(I0,1)/2) round(size(I0,2)/2)]);
+I1=imresize(I1,[round(size(I1,1)/4) round(size(I1,2)/4)]);
 %% Task 2: IDT
 iter_num=10;
 output = IDT(I0,I1,iter_num);
