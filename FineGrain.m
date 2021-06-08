@@ -1,4 +1,4 @@
-function output = FineGrain(Im,I0,iter_num)
+function output = FineGrain(Im,I0,iter_num,Phi_upp)
 %FINEGRAIN This function perform fine grain to the mapped image
 %   Detailed explanation goes here
 I0=I0*255;
@@ -10,10 +10,10 @@ for k=1:c
     I0k=I0(:,:,k);
     Imk=Im(:,:,k);
     J=Imk;
-    [Gm0,~]=imgradient(I0k,'prewitt');
+    [Gm0,~]=imgradient(Imk,'prewitt');
     %% Psi and Phi
     Psi=min(Gm0./5,1);
-    Phi=30./(1+10*(Gm0+1));
+    Phi=Phi_upp./(1+10*(Gm0+1));
 %     temp=Phi;
 %     Phi=Psi;
 %     Psi=temp;

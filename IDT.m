@@ -8,6 +8,7 @@ function output = IDT(I0,I1,iter_num,plotIterResult)
 %plotIterResult controls whether intermediate plots described as Task 3 are
 %drawn. It can be ommited, which means no ploting. If you want ploting, set
 %this value to 1.
+eps2=0.00000001;
 if nargin<4
     plotIterResult=0;
 end
@@ -26,6 +27,7 @@ end
 bar_num=300;
 % R=[1/3 2/3 2/3;2/3 1/3 -2/3;-2/3 2/3 -1/3];% This is an initialized rotation matrix
 R=eye(channel);
+% R=[R;orth(rand(channel,channel))];
 % R=[eye(3);R];
 if plotIterResult
     figure;
@@ -37,14 +39,17 @@ if plotIterResult
         title('target');
 end
 R_sum=R;
+KL=[];
 for iter=1:iter_num
     txt=['IDT iteration\t',num2str(iter),'/',num2str(iter_num),'\n'];
     fprintf(txt);
     axis_num=size(R,1);
-    ru0=R'*u0;
-    ru1=R'*u1;
+    ru0=R*u0;
+    ru1=R*u1;
     % ru0 and ru1 are rotated (projected) values
     u0_out=zeros(size(u0));
+    kl=zeros(axis_num,1);
+    hist_rec=[];
     for c=1:axis_num
         ru0_c=ru0(c,:);
         ru1_c=ru1(c,:);
@@ -55,8 +60,11 @@ for iter=1:iter_num
         t_c= TransferPDF_1D(hist_0,hist_1);% find the transform in 1-D
         ru0_c_out=interp1(range,t_c,ru0_c,'linear')./(bar_num-1).*(max_value-min_value)+min_value;% apply the transform
         u0_out(c,:)=ru0_c_out;
+        [hist_0,hist_1,~] = GetHist(ru0_c_out,ru1_c,bar_num);% Calculate histogram
+        kl(c)=sum((eps2+hist_1).*log((eps2+hist_1)./(eps2+hist_0)));
+        hist_rec=[hist_rec;hist(ru0_c_out,bar_num)];
     end
-    u0=u0+R*(u0_out-ru0);% everytime we take a new R, so we project the vectors back to the original axis
+    u0=u0+R\(u0_out-ru0);% everytime we take a new R, so we project the vectors back to the original axis
     % if we do not turn it back, then the next iteration would be operating
     % on rotated datas. Though this is same with what is described in the
     % paper, but we finally still need to rotate the data back. If we do
@@ -64,6 +72,15 @@ for iter=1:iter_num
     % used as R_1,R_2,R_3... and rotate the data back according to them.
     % But that is too troublesome, so we project the data ru0 back to u0
     % with current R for every iteration.
+    h_f=hist(reshape(u0,1,size(u0,1)*size(u0,2)),bar_num);
+    multi=ones(1,bar_num);
+    for k=1:size(hist_rec,1)
+        multi=multi.*(eps2+hist_rec(k,:));
+    end
+    kl_f=sum((eps2+h_f).*log((eps2+h_f)./multi));
+    kl=sum(kl);
+%     kl=kl;
+    KL=[KL sum(kl)];
     if plotIterResult
         subplot(ceil((iter_num+2)/4),4,2+iter);
         plotItermediateResultFromData(u0);
@@ -75,10 +92,15 @@ for iter=1:iter_num
     % be sufficient to obtain convergence,...'. So we just calculate a new
     % rotation matrix randomly.
 end
+% if plotIterResult
+%     subplot(ceil((iter_num+2)/4),4,2+iter+1);
+%     plot(sum(KL,1));
+% end
 output_1D=u0;
 output=zeros(size(I0));
 for c=1:channel
     output(:,:,c)=reshape(output_1D(c,:),size(I0,1),size(I0,2));
 end
+figure(round(rand*100)),plot(KL),title(num2str(plotIterResult));
 end
 

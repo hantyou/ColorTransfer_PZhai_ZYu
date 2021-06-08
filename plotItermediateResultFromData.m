@@ -25,8 +25,12 @@ for l=1:L
         end
     end
 end
+
 % imshow(log(F+1)./max(max(log(F+1))));
-contour(log(F+1));
-axis square;
+
+contour(log(F+1),6);
+
+% axis square;
+
 end
 
